@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12hours baby - 수면교육 전문 앱</title>
+    <meta name="description" content="12시간 통잠자는 아기를 위한 전문 수면교육 앱">
+    <meta name="theme-color" content="#3F5E76">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #F2E2D4 0%, #D9AFA7 100%);
+            min-height: 100vh;
+            color: #3F5E76;
+        }
+
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(63, 94, 118, 0.1);
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #3F5E76 0%, #8198A4 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 25px;
+            margin-right: 12px;
+            position: relative;
+        }
+
+        .clock-arc {
+            width: 50px;
+            height: 25px;
+            border: 4px solid #D9AFA7;
+            border-bottom: none;
+            border-radius: 50px 50px 0 0;
+            position: relative;
+        }
+
+        .clock-hand {
+            position: absolute;
+            width: 2px;
+            height: 15px;
+            background: #F2E2D4;
+            left: 50%;
+            bottom: 0;
+            transform-origin: bottom;
+            transform: translateX(-50%) rotate(15deg);
+            border-radius: 2px;
+        }
+
+        .clock-dots {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .dot {
+            width: 3px;
+            height: 3px;
+            background: #D9AFA7;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .dot:nth-child(1) { top: 2px; left: 50%; transform: translateX(-50%); }
+        .dot:nth-child(2) { top: 4px; left: 8px; }
+        .dot:nth-child(3) { top: 4px; right: 8px; }
+        .dot:nth-child(4) { top: 12px; left: 2px; }
+        .dot:nth-child(5) { top: 12px; right: 2px; }
+
+        .brand-text {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .tagline {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 5px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .connection-status {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .baby-selector {
+            background: #F2E2D4;
+            padding: 15px 20px;
+            border-bottom: 2px solid #D9AFA7;
+        }
+
+        .baby-tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            margin-bottom: 10px;
+        }
+
+        .baby-tab {
+            background: white;
+            border: 2px solid #8198A4;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .baby-tab.active {
+            background: #8198A4;
+            color: white;
+        }
+
+        .add-baby {
+            background: #D9AFA7;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-baby:hover {
+            background: #c19191;
+            transform: translateY(-1px);
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .current-baby-info {
+            background: linear-gradient(135deg, rgba(63, 94, 118, 0.05) 0%, rgba(129, 152, 164, 0.05) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(129, 152, 164, 0.2);
+        }
+
+        .baby-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #3F5E76;
+            margin-bottom: 8px;
+        }
+
+        .baby-age {
+            font-size: 16px;
+            color: #8198A4;
+            margin-bottom: 15px;
+        }
+
+        .next-nap-prediction {
+            background: linear-gradient(135deg, #D9AFA7 0%, #c19191 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .prediction-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .prediction-time {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .action-btn {
+            background: white;
+            border: 2px solid #8198A4;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(129, 152, 164, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(63, 94, 118, 0.15);
+            border-color: #3F5E76;
+        }
+
+        .action-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .action-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #3F5E76;
+        }
+
+        .sleep-stats {
+            background: white;
+            border: 1px solid #D9AFA7;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stats-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3F5E76;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 15px 10px;
+            background: linear-gradient(135deg, #F2E2D4 0%, rgba(217, 175, 167, 0.3) 100%);
+            border-radius: 12px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #3F5E76;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #8198A4;
+        }
+
+        .recent-activities {
+            background: white;
+            border: 1px solid #D9AFA7;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .activities-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3F5E76;
+            margin-bottom: 15px;
+        }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #F2E2D4;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .activity-icon {
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        .activity-details h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #3F5E76;
+            margin-bottom: 2px;
+        }
+
+        .activity-details p {
+            font-size: 12px;
+            color: #8198A4;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #8198A4;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            background: white;
+            border-top: 1px solid #D9AFA7;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            text-align: center;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .nav-item:hover {
+            background: #F2E2D4;
+        }
+
+        .nav-item.active {
+            color: #3F5E76;
+            background: #F2E2D4;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 350px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #3F5E76;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #3F5E76;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #D9AFA7;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #8198A4;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #3F5E76;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2f4a5c;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #D9AFA7;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #c19191;
+            transform: translateY(-1px);
+        }
+
+        .sleep-guide {
+            background: linear-gradient(135deg, rgba(63, 94, 118, 0.05) 0%, rgba(129, 152, 164, 0.05) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3F5E76;
+        }
+
+        .guide-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #3F5E76;
+            margin-bottom: 10px;
+        }
+
+        .guide-content {
+            font-size: 14px;
+            color: #8198A4;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                box-shadow: none;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+                transform: none;
+                left: 0;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .page {
+            display: none;
+            padding-bottom: 80px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #27AE60, #219A52);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+            z-index: 1000;
+            font-size: 14px;
+            font-weight: 600;
+            max-width: 300px;
+            transform: translateX(350px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <div class="clock-arc">
+                        <div class="clock-hand"></div>
+                        <div class="clock-dots">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="brand-text">12hours baby</div>
+            </div>
+            <div class="tagline">12시간 통잠자는 아기를 위한 전문 수면교육</div>
+            <div class="connection-status">
+                <span id="connectionStatus" style="color: #27AE60;">🟢 전문가와 실시간 연결됨</span>
+            </div>
+        </div>
+
+        <div class="baby-selector">
+            <div class="baby-tabs" id="babyTabs">
+                <div class="baby-tab active" data-baby="0">👶 지우</div>
+            </div>
+            <button class="add-baby" onclick="showAddBabyModal()">+ 아기 추가</button>
+        </div>
+
+        <!-- 홈 페이지 -->
+        <div class="page active" id="home">
+            <div class="main-content">
+                <div class="current-baby-info">
+                    <div class="baby-name" id="currentBabyName">지우</div>
+                    <div class="baby-age" id="currentBabyAge">생후 4개월 15일 (D+135)</div>
+                    <div class="next-nap-prediction">
+                        <div class="prediction-label">다음 낮잠 예상 시간</div>
+                        <div class="prediction-time" id="nextNapTime">오후 2:30</div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <div class="action-btn" onclick="showSleepModal('nap')">
+                        <span class="action-icon">😴</span>
+                        <div class="action-text">낮잠 기록</div>
+                    </div>
+                    <div class="action-btn" onclick="showSleepModal('night')">
+                        <span class="action-icon">🌙</span>
+                        <div class="action-text">밤잠 기록</div>
+                    </div>
+                    <div class="action-btn" onclick="showWakeModal()">
+                        <span class="action-icon">☀️</span>
+                        <div class="action-text">깨기 기록</div>
+                    </div>
+                    <div class="action-btn" onclick="showPage('schedule')">
+                        <span class="action-icon">📅</span>
+                        <div class="action-text">수면 스케줄</div>
+                    </div>
+                </div>
+
+                <div class="sleep-stats">
+                    <div class="stats-title">오늘의 수면 통계</div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="todayNaps">3</div>
+                            <div class="stat-label">낮잠 횟수</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalSleepTime">9.5h</div>
+                            <div class="stat-label">총 수면시간</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="longestSleep">11h</div>
+                            <div class="stat-label">최장 수면</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sleep-guide">
+                    <div class="guide-title">💡 4개월 아기 수면 가이드</div>
+                    <div class="guide-content">
+                        이 시기에는 밤잠이 길어지고 낮잠은 3-4회 정도가 적절합니다. 
+                        수면교육을 시작하기 좋은 시기이니 일정한 루틴을 만들어주세요.
+                    </div>
+                </div>
+
+                <div class="recent-activities">
+                    <div class="activities-title">최근 활동</div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">😴</span>
+                            <div class="activity-details">
+                                <h4>2번째 낮잠</h4>
+                                <p>1시간 30분</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">1시간 전</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">☀️</span>
+                            <div class="activity-details">
+                                <h4>아침 기상</h4>
+                                <p>밤잠 11시간</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">8시간 전</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">🌙</span>
+                            <div class="activity-details">
+                                <h4>밤잠</h4>
+                                <p>자력으로 입면</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">19시간 전</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 통계 페이지 -->
+        <div class="page" id="stats">
+            <div class="main-content">
+                <h2 style="color: #3F5E76; margin-bottom: 20px;">수면 분석</h2>
+                
+                <div class="sleep-stats">
+                    <div class="stats-title">주간 평균</div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">10.5h</div>
+                            <div class="stat-label">평균 수면</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">3.2</div>
+                            <div class="stat-label">평균 낮잠</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">85%</div>
+                            <div class="stat-label">목표 달성</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sleep-guide">
+                    <div class="guide-title">📊 수면 패턴 분석</div>
+                    <div class="guide-content">
+                        지난 주 수면 패턴이 개선되고 있습니다! 
+                        밤잠 시간이 점차 늘어나고 있으며, 낮잠 횟수도 안정화되고 있어요.
+                    </div>
+                </div>
+
+                <div class="recent-activities">
+                    <div class="activities-title">수면 기록 (최근 7일)</div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">📅</span>
+                            <div class="activity-details">
+                                <h4>6/30 (오늘)</h4>
+                                <p>낮잠 3회, 총 9.5시간</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">100%</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">📅</span>
+                            <div class="activity-details">
+                                <h4>6/29</h4>
+                                <p>낮잠 4회, 총 10.2시간</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">95%</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">📅</span>
+                            <div class="activity-details">
+                                <h4>6/28</h4>
+                                <p>낮잠 3회, 총 11.1시간</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">110%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 스케줄 페이지 -->
+        <div class="page" id="schedule">
+            <div class="main-content">
+                <h2 style="color: #3F5E76; margin-bottom: 20px;">수면 스케줄</h2>
+                
+                <div class="current-baby-info">
+                    <div class="baby-name">권장 수면 스케줄</div>
+                    <div class="baby-age">4개월 아기 맞춤</div>
+                    <div class="next-nap-prediction">
+                        <div class="prediction-label">다음 활동</div>
+                        <div class="prediction-time">수유 시간</div>
+                    </div>
+                </div>
+
+                <div class="recent-activities">
+                    <div class="activities-title">오늘의 스케줄</div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">☀️</span>
+                            <div class="activity-details">
+                                <h4>07:00 기상</h4>
+                                <p>완료됨</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">✅</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">😴</span>
+                            <div class="activity-details">
+                                <h4>09:30 1차 낮잠</h4>
+                                <p>1시간 30분 (완료)</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">✅</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">😴</span>
+                            <div class="activity-details">
+                                <h4>12:30 2차 낮잠</h4>
+                                <p>1시간 (완료)</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">✅</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">😴</span>
+                            <div class="activity-details">
+                                <h4>15:00 3차 낮잠</h4>
+                                <p>45분 예정</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">⏰</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">🌙</span>
+                            <div class="activity-details">
+                                <h4>19:30 밤잠</h4>
+                                <p>11시간 예정</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">⏰</div>
+                    </div>
+                </div>
+
+                <div class="sleep-guide">
+                    <div class="guide-title">💡 스케줄 팁</div>
+                    <div class="guide-content">
+                        일정한 시간에 재우고 깨우는 것이 중요합니다. 
+                        아기가 피곤하기 전에 미리 잠자리에 눕혀주세요.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 가이드 페이지 -->
+        <div class="page" id="guide">
+            <div class="main-content">
+                <h2 style="color: #3F5E76; margin-bottom: 20px;">수면교육 가이드</h2>
+                
+                <div class="sleep-guide">
+                    <div class="guide-title">🎯 수면교육의 목표</div>
+                    <div class="guide-content">
+                        아기가 스스로 잠들고, 밤에 깨지 않고 연속으로 자는 것을 목표로 합니다.
+                        12시간 통잠은 생후 4-6개월부터 가능합니다.
+                    </div>
+                </div>
+
+                <div class="sleep-guide">
+                    <div class="guide-title">📝 수면교육 5단계</div>
+                    <div class="guide-content">
+                        1. 일정한 루틴 만들기<br>
+                        2. 수면 환경 최적화<br>
+                        3. 자기진정법 가르치기<br>
+                        4. 점진적 개입 줄이기<br>
+                        5. 일관성 유지하기
+                    </div>
+                </div>
+
+                <div class="sleep-guide">
+                    <div class="guide-title">🌙 월령별 수면 패턴</div>
+                    <div class="guide-content">
+                        <strong>0-3개월:</strong> 낮잠 4-5회, 밤잠 8-9시간<br>
+                        <strong>4-6개월:</strong> 낮잠 3-4회, 밤잠 10-12시간<br>
+                        <strong>7-12개월:</strong> 낮잠 2-3회, 밤잠 11-12시간
+                    </div>
+                </div>
+
+                <div class="sleep-guide">
+                    <div class="guide-title">⚠️ 주의사항</div>
+                    <div class="guide-content">
+                        아기가 아프거나 백신을 맞은 후에는 평소와 다를 수 있습니다.
+                        개별 차이가 있으니 아기의 신호를 잘 관찰해주세요.
+                    </div>
+                </div>
+
+                <div class="recent-activities">
+                    <div class="activities-title">전문 상담 문의</div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">📞</span>
+                            <div class="activity-details">
+                                <h4>1:1 전화 상담</h4>
+                                <p>개별 맞춤 수면교육</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">예약</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <span class="activity-icon">💬</span>
+                            <div class="activity-details">
+                                <h4>카카오톡 상담</h4>
+                                <p>실시간 질문 답변</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">문의</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="showPage('home')">
+                <span class="nav-icon">🏠</span>
+                <div class="nav-label">홈</div>
+            </div>
+            <div class="nav-item" onclick="showPage('stats')">
+                <span class="nav-icon">📊</span>
+                <div class="nav-label">통계</div>
+            </div>
+            <div class="nav-item" onclick="showPage('schedule')">
+                <span class="nav-icon">📅</span>
+                <div class="nav-label">스케줄</div>
+            </div>
+            <div class="nav-item" onclick="showPage('guide')">
+                <span class="nav-icon">📚</span>
+                <div class="nav-label">가이드</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 수면 기록 모달 -->
+    <div class="modal" id="sleepModal">
+        <div class="modal-content">
+            <div class="modal-title">수면 기록</div>
+            <div class="form-group">
+                <label class="form-label">수면 시작 시간</label>
+                <input type="time" class="form-input" id="sleepStartTime">
+            </div>
+            <div class="form-group">
+                <label class="form-label">수면 종료 시간</label>
+                <input type="time" class="form-input" id="sleepEndTime">
+            </div>
+            <div class="form-group">
+                <label class="form-label">메모 (선택)</label>
+                <input type="text" class="form-input" id="sleepMemo" placeholder="예: 쉽게 잠들었음">
+            </div>
+            <div class="form-buttons">
+                <button class="btn btn-secondary" onclick="closeModal('sleepModal')">취소</button>
+                <button class="btn btn-primary" onclick="saveSleepRecord()">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 기상 기록 모달 -->
+    <div class="modal" id="wakeModal">
+        <div class="modal-content">
+            <div class="modal-title">기상 기록</div>
+            <div class="form-group">
+                <label class="form-label">기상 시간</label>
+                <input type="time" class="form-input" id="wakeTime">
+            </div>
+            <div class="form-group">
+                <label class="form-label">기상 상태</label>
+                <select class="form-input" id="wakeState">
+                    <option value="good">기분 좋게</option>
+                    <option value="crying">울면서</option>
+                    <option value="normal">평소와 같이</option>
+                </select>
+            </div>
+            <div class="form-buttons">
+                <button class="btn btn-secondary" onclick="closeModal('wakeModal')">취소</button>
+                <button class="btn btn-primary" onclick="saveWakeRecord()">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 아기 추가 모달 -->
+    <div class="modal" id="addBabyModal">
+        <div class="modal-content">
+            <div class="modal-title">아기 추가</div>
+            <div class="form-group">
+                <label class="form-label">아기 이름</label>
+                <input type="text" class="form-input" id="babyName" placeholder="예: 하준이">
+            </div>
+            <div class="form-group">
+                <label class="form-label">생년월일</label>
+                <input type="date" class="form-input" id="babyBirthDate">
+            </div>
+            <div class="form-buttons">
+                <button class="btn btn-secondary" onclick="closeModal('addBabyModal')">취소</button>
+                <button class="btn btn-primary" onclick="addNewBaby()">추가</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 전역 변수
+        let babies = [
+            {
+                id: 0,
+                name: '지우',
+                birthDate: '2025-02-15',
+                records: [],
+                parentId: 'parent_001'
+            }
+        ];
+        let currentBabyId = 0;
+        let currentPage = 'home';
+        let isFirebaseConnected = false;
+
+        // 실시간 데이터 전송 함수
+        function sendToFirebase(recordType, data) {
+            console.log(`🔥 Firebase로 전송: ${recordType}`, data);
+            showNotification('✅ 수면교육 전문가에게 실시간 전송되었습니다!');
+        }
+
+        // 알림 표시 함수
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+
+        // 페이지 관리
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            document.getElementById(pageId).classList.add('active');
+            event.target.closest('.nav-item').classList.add('active');
+            currentPage = pageId;
+        }
+
+        // 모달 관리
+        function showSleepModal(type) {
+            const now = new Date();
+            const timeString = now.toTimeString().substr(0, 5);
+            document.getElementById('sleepStartTime').value = timeString;
+            document.getElementById('sleepModal').style.display = 'block';
+        }
+
+        function showWakeModal() {
+            const now = new Date();
+            const timeString = now.toTimeString().substr(0, 5);
+            document.getElementById('wakeTime').value = timeString;
+            document.getElementById('wakeModal').style.display = 'block';
+        }
+
+        function showAddBabyModal() {
+            document.getElementById('addBabyModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 아기 나이 계산
+        function calculateAge(birthDate) {
+            const birth = new Date(birthDate);
+            const today = new Date();
+            const diffTime = Math.abs(today - birth);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const months = Math.floor(diffDays / 30);
+            const days = diffDays % 30;
+            return { months, days, totalDays: diffDays };
+        }
+
+        // 다음 낮잠 시간 예측
+        function predictNextNap() {
+            const now = new Date();
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+            
+            const napSchedule = [
+                { time: 9 * 60 + 30, label: '오전 9:30' },
+                { time: 12 * 60 + 30, label: '오후 12:30' },
+                { time: 15 * 60, label: '오후 3:00' },
+                { time: 17 * 60, label: '오후 5:00' }
+            ];
+            
+            for (let nap of napSchedule) {
+                if (currentTime < nap.time) {
+                    return nap.label;
+                }
+            }
+            
+            return '다음날 오전 9:30';
+        }
+
+        // 시간 차이 계산
+        function calculateDuration(startTime, endTime) {
+            const start = new Date(`1970-01-01T${startTime}:00`);
+            const end = new Date(`1970-01-01T${endTime}:00`);
+            const diff = end - start;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            return `${hours}시간 ${minutes}분`;
+        }
+
+        // 수면 기록 저장
+        function saveSleepRecord() {
+            const startTime = document.getElementById('sleepStartTime').value;
+            const endTime = document.getElementById('sleepEndTime').value;
+            const memo = document.getElementById('sleepMemo').value;
+            
+            if (!startTime || !endTime) {
+                alert('시작 시간과 종료 시간을 모두 입력해주세요.');
+                return;
+            }
+            
+            const baby = babies.find(b => b.id === currentBabyId);
+            const record = {
+                id: Date.now(),
+                type: 'sleep',
+                startTime,
+                endTime,
+                memo,
+                date: new Date().toISOString().split('T')[0],
+                duration: calculateDuration(startTime, endTime)
+            };
+            
+            baby.records.push(record);
+            sendToFirebase('sleep', record);
+            updateDisplay();
+            closeModal('sleepModal');
+            
+            document.getElementById('sleepStartTime').value = '';
+            document.getElementById('sleepEndTime').value = '';
+            document.getElementById('sleepMemo').value = '';
+        }
+
+        // 기상 기록 저장
+        function saveWakeRecord() {
+            const wakeTime = document.getElementById('wakeTime').value;
+            const wakeState = document.getElementById('wakeState').value;
+            
+            if (!wakeTime) {
+                alert('기상 시간을 입력해주세요.');
+                return;
+            }
+            
+            const baby = babies.find(b => b.id === currentBabyId);
+            const record = {
+                id: Date.now(),
+                type: 'wake',
+                time: wakeTime,
+                state: wakeState,
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            baby.records.push(record);
+            sendToFirebase('wake', record);
+            updateDisplay();
+            closeModal('wakeModal');
+            
+            document.getElementById('wakeTime').value = '';
+            document.getElementById('wakeState').value = 'good';
+        }
+
+        // 새 아기 추가
+        function addNewBaby() {
+            const name = document.getElementById('babyName').value;
+            const birthDate = document.getElementById('babyBirthDate').value;
+            
+            if (!name || !birthDate) {
+                alert('이름과 생년월일을 모두 입력해주세요.');
+                return;
+            }
+            
+            const newBaby = {
+                id: babies.length,
+                name,
+                birthDate,
+                records: [],
+                parentId: `parent_${Date.now()}`
+            };
+            
+            babies.push(newBaby);
+            updateBabyTabs();
+            closeModal('addBabyModal');
+            showNotification(`${name} 아기가 추가되었습니다!`);
+            
+            document.getElementById('babyName').value = '';
+            document.getElementById('babyBirthDate').value = '';
+        }
+
+        // 아기 탭 업데이트
+        function updateBabyTabs() {
+            const tabsContainer = document.getElementById('babyTabs');
+            tabsContainer.innerHTML = '';
+            
+            babies.forEach(baby => {
+                const tab = document.createElement('div');
+                tab.className = `baby-tab ${baby.id === currentBabyId ? 'active' : ''}`;
+                tab.setAttribute('data-baby', baby.id);
+                tab.textContent = `👶 ${baby.name}`;
+                tab.onclick = () => selectBaby(baby.id);
+                tabsContainer.appendChild(tab);
+            });
+        }
+
+        // 아기 선택
+        function selectBaby(babyId) {
+            currentBabyId = babyId;
+            updateBabyTabs();
+            updateDisplay();
+        }
+
+        // 화면 업데이트
+        function updateDisplay() {
+            const baby = babies.find(b => b.id === currentBabyId);
+            if (!baby) return;
+            
+            const age = calculateAge(baby.birthDate);
+            
+            document.getElementById('currentBabyName').textContent = baby.name;
+            document.getElementById('currentBabyAge').textContent = 
+                `생후 ${age.months}개월 ${age.days}일 (D+${age.totalDays})`;
+            
+            document.getElementById('nextNapTime').textContent = predictNextNap();
+            
+            document.getElementById('todayNaps').textContent = '3';
+            document.getElementById('totalSleepTime').textContent = '9.5h';
+            document.getElementById('longestSleep').textContent = '11h';
+        }
+
+        // 초기화
+        function init() {
+            updateBabyTabs();
+            updateDisplay();
+            
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.onclick = function(e) {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                };
+            });
+
+            showNotification('12hours baby 앱이 시작되었습니다! 👶');
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
